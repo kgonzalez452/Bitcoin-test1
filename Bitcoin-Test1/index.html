@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+
+<body>
+
+    <table style="width:100%">
+        <tr>
+            <th></th>
+            <th>Bitcoin</th>
+            <th>BTC/USD</th>
+            <th>BTC/EUR</th>
+            <th>BTC/JPY</th>
+            <th>BTC/CAD</th>
+        </tr>
+        <tr>
+            <td>Prices</td>
+            <td>
+                <p class="output"></p>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+    <button class="refresh">Refresh</button>
+
+
+
+
+    <style>
+        tr,
+        th,
+        td {
+            border-bottom: 1px solid black;
+            border-right: 1px solid black;
+        }
+
+        p {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+
+    <script>
+        const button = document.querySelector('.button')
+        const td = document.querySelectorAll('.td')
+        const output = document.querySelector('.output')
+        const url = "https://bitpay.com/api/rates"
+
+        //Grab elements from the DOM in an array (Nodelist) we are gonna call it for now elements
+        const elements = []
+
+        class BitCoin {
+            constructor(url, td) {
+                this.url = url
+                this.td = elements
+                // this.getPrices = this.getPrices.bind(this)
+                this.getPrices(this.url, this.td, this.setPrices)
+                //this.refresh = this.refresh.bind(this)
+            }
+            setPrices(td, prices) {
+                //more stuff happens here
+            }
+            getPrices(URL, td) {
+                console.log('ready for get prices')
+                $.ajax({
+                    url: URL, //"https://bitpay.com/api/rates",
+                    dataType: "json",
+                    success: (data) => {
+                        console.log(data)
+                        //some stuff
+                        this.prices = data
+                        this.setPrices(td, this.prices)
+                        for (let i in data[0]) {
+                            output.innerHTML +=
+                                `
+                            <td>
+                            ${data[0].rate}
+                            </td>
+                            `
+                        }
+                    },
+                    error: (error) => {
+                        console.log("EEEERRRRRRROOOORRR!!!!!!")
+                    }
+                })
+
+            }
+            refresh() {
+                this.getPrices()
+            }
+        }
+        let price = new BitCoin(url, elements)
+        // price.addEventListener('click', function (refresh) {
+        //     this.getPrices()
+        // })
+        console.log(url)
+    </script>
+</body>
+
+</html>
